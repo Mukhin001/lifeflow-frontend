@@ -1,17 +1,5 @@
 import { baseApi } from "../baseApi";
-
-type SendLocationRequest = {
-  lat: number;
-  lng: number;
-};
-
-type SendLocationResponse = {
-  status: string;
-  received: {
-    lat: number;
-    lng: number;
-  };
-};
+import { SendLocationRequest, SendLocationResponse } from "./location.types";
 
 export const locationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
