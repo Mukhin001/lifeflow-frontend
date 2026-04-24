@@ -1,6 +1,4 @@
-export type SendLocationRequest =
-  | { type: "success"; lat: number; lng: number }
-  | { type: "denied" };
+export type SendLocationRequest = { lat: number; lng: number };
 
 export type SendLocationResponse = {
   status: "ok" | "error" | "denied";
