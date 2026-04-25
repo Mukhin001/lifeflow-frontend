@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import { useUserLocation } from "./hooks/useUserLocation";
-import { LatLng, Mode } from "./location.types";
+import { Coordinates, Mode } from "./model/types";
 import { useRoute } from "./hooks/useRoute";
-import MapView from "./MapView";
+import MapControls from "./MapControls";
+import dynamic from "next/dynamic";
+
+const MapView = dynamic(() => import("./MapView"), {
+  ssr: false,
+});
 
 const MapContainer = () => {
   const { startPoint, status, setStartPoint } = useUserLocation();
-  const [endPoint, setEndPoint] = useState<LatLng | null>(null);
+  const [endPoint, setEndPoint] = useState<Coordinates | null>(null);
   const [mode, setMode] = useState<Mode>("end");
 
   const route = useRoute(startPoint, endPoint);
@@ -16,15 +21,31 @@ const MapContainer = () => {
   if (status === "loading") return <div>Загрузка...</div>;
 
   return (
-    <MapView
-      startPoint={startPoint}
-      endPoint={endPoint}
-      mode={mode}
-      setMode={setMode}
-      route={route}
-      setStartPoint={setStartPoint}
-      setEndPoint={setEndPoint}
-    />
+    <>
+      {status === "denied" && (
+        <div>
+          Вы запретили доступ к геолокации. Локация будет по умолчанию (Москва).
+        </div>
+      )}
+
+      {status === "error" && <div>Ошибка получения геолокации</div>}
+
+      <MapControls mode={mode} setMode={setMode} />
+      <div style={{ marginBottom: 6 }}>
+        {mode === "start"
+          ? "Кликните по карте, чтобы выбрать старт"
+          : "Кликните по карте, чтобы выбрать точку назначения"}
+      </div>
+      <MapView
+        startPoint={startPoint}
+        endPoint={endPoint}
+        mode={mode}
+        setMode={setMode}
+        route={route}
+        setStartPoint={setStartPoint}
+        setEndPoint={setEndPoint}
+      />
+    </>
   );
 };
 

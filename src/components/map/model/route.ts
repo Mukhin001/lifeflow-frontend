@@ -1,6 +1,6 @@
-import { LatLng } from "./location.types";
+import { Coordinates } from "./types";
 
-export const getRoute = async (start: LatLng, end: LatLng) => {
+export const getRoute = async (start: Coordinates, end: Coordinates) => {
   const res = await fetch(
     `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`,
   );

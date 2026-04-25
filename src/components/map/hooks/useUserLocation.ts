@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import { GeoStatus, LatLng } from "../location.types";
-
-const DEFAULT_LOCATION: LatLng = {
-  lat: 55.751244,
-  lng: 37.618423,
-};
+import { GeoStatus, Coordinates } from "../model/types";
+import { DEFAULT_LOCATION } from "../model/constants";
 
 export const useUserLocation = () => {
-  const [startPoint, setStartPoint] = useState<LatLng>(DEFAULT_LOCATION);
+  const [startPoint, setStartPoint] = useState<Coordinates>(DEFAULT_LOCATION);
   const [status, setStatus] = useState<GeoStatus>("loading");
 
   useEffect(() => {
@@ -19,9 +15,16 @@ export const useUserLocation = () => {
         });
         setStatus("ready");
       },
-      () => {
-        setStartPoint({ lat: 55.751244, lng: 37.618423 });
-        setStatus("denied");
+      (error) => {
+        setStartPoint(DEFAULT_LOCATION);
+
+        if (error.code === error.PERMISSION_DENIED) {
+          setStatus("denied");
+        } else {
+          setStatus("error");
+        }
+
+        console.error("Geolocation error:", error);
       },
     );
   }, []);
