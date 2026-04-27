@@ -30,7 +30,7 @@ const MapContainer = () => {
 
       {status === "error" && <div>Ошибка получения геолокации</div>}
 
-      <MapControls mode={mode} setMode={setMode} />
+      <MapControls mode={mode} setMode={setMode} setEndPoint={setEndPoint} />
       <div style={{ marginBottom: 6 }}>
         {mode === "start"
           ? "Кликните по карте, чтобы выбрать старт"

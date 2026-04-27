@@ -11,7 +11,7 @@ const getButtonStyle = (active: boolean): React.CSSProperties => ({
   borderColor: active ? "#3B82F6" : "#ccc",
 });
 
-const MapControls = ({ mode, setMode }: MapControlsProps) => {
+const MapControls = ({ mode, setMode, setEndPoint }: MapControlsProps) => {
   return (
     <div style={{ marginBottom: 10 }}>
       <button
@@ -26,6 +26,7 @@ const MapControls = ({ mode, setMode }: MapControlsProps) => {
       >
         Выбрать финиш
       </button>
+      <button onClick={() => setEndPoint(null)}> Сбросить маршрут</button>
       <span style={{ marginLeft: 10 }}>
         Режим: {mode === "start" ? "выбор старта" : "выбор финиша"}
       </span>

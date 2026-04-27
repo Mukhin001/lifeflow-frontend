@@ -14,5 +14,5 @@ export const useRoute = (
     getRoute(startPoint, endPoint).then(setRoute).catch(console.error);
   }, [startPoint, endPoint]);
 
-  return route;
+  return endPoint ? route : [];
 };

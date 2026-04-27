@@ -11,6 +11,7 @@ import {
 import { MapViewProps } from "./model/types";
 import { endIcon, startIcon } from "./model/mapIcons";
 import MapEvents from "./MapEvents";
+import FitBounds from "./FitBounds";
 
 const MapView = ({
   startPoint,
@@ -54,6 +55,8 @@ const MapView = ({
         setStartPoint={setStartPoint}
         setEndPoint={setEndPoint}
       />
+
+      <FitBounds route={route} />
     </MapContainer>
   );
 };

@@ -32,4 +32,5 @@ export type MapEventsProps = {
 export type MapControlsProps = {
   mode: Mode;
   setMode: (m: Mode) => void;
+  setEndPoint: (p: Coordinates | null) => void;
 };
