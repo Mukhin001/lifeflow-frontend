@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
+import { RoutePoint } from "./model/types";
 
-const FitBounds = ({ route }: { route: [number, number][] }) => {
+const FitBounds = ({ route }: { route: RoutePoint }) => {
   const map = useMap();
 
   useEffect(() => {

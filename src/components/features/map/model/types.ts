@@ -1,36 +1,38 @@
-export type Coordinates = {
-  lat: number;
-  lng: number;
-};
-
+type ApiStatus = "ok" | "error" | "denied";
+export type RoutePoint = [number, number][];
 export type GeoStatus = "loading" | "ready" | "denied" | "error";
-
 export type Mode = "start" | "end";
 
-export type SendLocationResponse = {
-  status: "ok" | "error" | "denied";
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface SendLocationResponse {
+  status: ApiStatus;
   message: string;
   received?: Coordinates;
-};
+}
 
-export type MapViewProps = {
+export interface MapViewProps {
   startPoint: Coordinates;
   endPoint: Coordinates | null;
-  route: [number, number][];
+  route: RoutePoint;
+  mode: Mode;
+  handleSelectStartPoint: (p: Coordinates) => void;
+  handleSelectEndPoint: (p: Coordinates) => void;
+  disabled: boolean;
+}
+
+export interface MapEventsProps {
   mode: Mode;
   setStartPoint: (p: Coordinates) => void;
   setEndPoint: (p: Coordinates) => void;
-  setMode: (m: Mode) => void;
-};
+}
 
-export type MapEventsProps = {
-  mode: Mode;
-  setStartPoint: (p: Coordinates) => void;
-  setEndPoint: (p: Coordinates) => void;
-};
-
-export type MapControlsProps = {
+export interface MapControlsProps {
   mode: Mode;
   setMode: (m: Mode) => void;
-  setEndPoint: (p: Coordinates | null) => void;
-};
+  disabled?: boolean;
+  handleResetRoute: () => void;
+}

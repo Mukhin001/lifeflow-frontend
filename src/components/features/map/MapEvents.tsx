@@ -1,23 +1,13 @@
 import { useMapEvents } from "react-leaflet";
-import { MapEventsProps } from "./model/types";
+import { Coordinates } from "./model/types";
 
-const MapEvents = ({
-  mode,
-  setStartPoint,
-  setEndPoint,
-}: MapEventsProps): null => {
+const MapEvents = ({ onClick }: { onClick: (p: Coordinates) => void }) => {
   useMapEvents({
     click(e) {
-      const point = {
+      onClick({
         lat: e.latlng.lat,
         lng: e.latlng.lng,
-      };
-
-      if (mode === "start") {
-        setStartPoint(point);
-      } else {
-        setEndPoint(point);
-      }
+      });
     },
   });
 

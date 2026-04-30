@@ -8,7 +8,7 @@ import {
   Popup,
 } from "react-leaflet";
 
-import { MapViewProps } from "./model/types";
+import { Coordinates, MapViewProps } from "./model/types";
 import { endIcon, startIcon } from "./model/mapIcons";
 import MapEvents from "./MapEvents";
 import FitBounds from "./FitBounds";
@@ -18,9 +18,19 @@ const MapView = ({
   endPoint,
   route,
   mode,
-  setStartPoint,
-  setEndPoint,
+  handleSelectStartPoint,
+  handleSelectEndPoint,
+  disabled,
 }: MapViewProps) => {
+  const handleMapClick = (point: Coordinates) => {
+    if (disabled) return;
+
+    if (mode === "start") {
+      handleSelectStartPoint(point);
+    } else {
+      handleSelectEndPoint(point);
+    }
+  };
   return (
     <MapContainer
       center={[startPoint.lat, startPoint.lng]}
@@ -50,11 +60,7 @@ const MapView = ({
       {/* 🛣 маршрут */}
       {route.length > 0 && <Polyline positions={route} />}
 
-      <MapEvents
-        mode={mode}
-        setStartPoint={setStartPoint}
-        setEndPoint={setEndPoint}
-      />
+      <MapEvents onClick={handleMapClick} />
 
       <FitBounds route={route} />
     </MapContainer>
