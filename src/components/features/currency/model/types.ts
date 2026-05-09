@@ -1,3 +1,5 @@
+export type Field = "left" | "right";
+
 export type CurrencyViewProps = {
   state: {
     leftValue: string;
@@ -10,9 +12,7 @@ export type CurrencyViewProps = {
     rate: number;
   };
   actions: {
-    handleLeftAmount: (v: string) => void;
-    handleRightAmount: (v: string) => void;
-    handleLeftCurrency: (v: string) => void;
-    handleRightCurrency: (v: string) => void;
+    handleAmountChange: (field: Field, v: string) => void;
+    handleCurrencyChange: (field: Field, v: string) => void;
   };
 };

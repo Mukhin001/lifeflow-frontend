@@ -1,4 +1,4 @@
-import { CURRENCIES } from "./model.ts/constants";
+import { CURRENCIES } from "./model/constants";
 
 type Props = {
   value: string;

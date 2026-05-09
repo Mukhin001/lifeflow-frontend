@@ -1,4 +1,4 @@
-import { CURRENCIES } from "./model.ts/constants";
+import { CURRENCIES } from "./model/constants";
 interface Props {
   rate: number;
   rates: Record<string, number>;

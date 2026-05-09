@@ -1,4 +1,4 @@
-import { CurrencyViewProps } from "./model.ts/types";
+import { CurrencyViewProps } from "./model/types";
 
 import AmountInput from "./AmountInput";
 import CurrencySelect from "./CurrencySelect";
@@ -17,25 +17,25 @@ const CurrencyView = ({ state, actions }: CurrencyViewProps) => {
       >
         <AmountInput
           value={state.leftValue}
-          onChange={actions.handleLeftAmount}
+          onChange={(value) => actions.handleAmountChange("left", value)}
           disabled={state.isLoading}
         />
         <CurrencySelect
           value={state.leftCurrency}
-          onChange={actions.handleLeftCurrency}
+          onChange={(value) => actions.handleCurrencyChange("left", value)}
           disabled={state.isLoading}
           exclude={state.rightCurrency}
         />
 
         <AmountInput
           value={state.rightValue}
-          onChange={actions.handleRightAmount}
+          onChange={(value) => actions.handleAmountChange("right", value)}
           disabled={state.isLoading}
         />
 
         <CurrencySelect
           value={state.rightCurrency}
-          onChange={actions.handleRightCurrency}
+          onChange={(value) => actions.handleCurrencyChange("right", value)}
           disabled={state.isLoading}
           exclude={state.leftCurrency}
         />
