@@ -1,8 +1,8 @@
-type Props = {
+interface Props {
   value: string;
   onChange: (v: string) => void;
   disabled: boolean;
-};
+}
 
 const AmountInput = ({ value, onChange, disabled }: Props) => {
   return (

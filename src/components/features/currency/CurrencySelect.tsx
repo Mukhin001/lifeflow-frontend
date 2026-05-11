@@ -1,11 +1,11 @@
 import { CURRENCIES } from "./model/constants";
 
-type Props = {
+interface Props {
   value: string;
   onChange: (v: string) => void;
-  disabled?: boolean;
-  exclude?: string;
-};
+  disabled: boolean;
+  exclude: string;
+}
 
 const CurrencySelect = ({ value, onChange, disabled, exclude }: Props) => {
   return (

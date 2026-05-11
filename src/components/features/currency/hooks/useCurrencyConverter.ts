@@ -2,22 +2,50 @@ import { useState } from "react";
 import { useGetRatesQuery } from "@/src/api/currency/currencyApi";
 
 import { calculateCurrency } from "../model/calculateCurrency";
-import { Field } from "../model/types";
+import { CurrencyConverterResult, Field } from "../model/types";
 
-export const useCurrencyConverter = () => {
+export const useCurrencyConverter = (): CurrencyConverterResult => {
   const [amount, setAmount] = useState("1");
-
   const [activeField, setActiveField] = useState<Field>("left");
-
   const [leftCurrency, setLeftCurrency] = useState("USD");
-
   const [rightCurrency, setRightCurrency] = useState("RUB");
 
-  const { data, isLoading, isFetching, error } = useGetRatesQuery(leftCurrency);
+  const { data, isLoading, isFetching, error, refetch } =
+    useGetRatesQuery(leftCurrency);
 
-  const rates = data && data.status === "ok" ? data.rates : {};
+  const handleRetry = (): void => {
+    refetch();
+  };
 
-  const rate = rates[rightCurrency] ?? 0;
+  if (isLoading) {
+    return {
+      status: "loading",
+    };
+  }
+
+  if (error) {
+    return {
+      status: "network-error",
+      message: "Ошибка сети",
+      actions: {
+        handleRetry,
+      },
+    };
+  }
+
+  if (!data || data.status === "error") {
+    return {
+      status: "error",
+      message: data?.message || "Ошибка получения курсов",
+      actions: {
+        handleRetry,
+      },
+    };
+  }
+
+  const rates = data.rates;
+
+  const rate = rates[rightCurrency];
 
   const leftValue =
     activeField === "left" ? amount : calculateCurrency(amount, rate, true);
@@ -38,28 +66,21 @@ export const useCurrencyConverter = () => {
     }
   };
 
-  const state = {
-    leftValue,
-    rightValue,
-    leftCurrency,
-    rightCurrency,
-    isLoading,
-    isFetching,
-    rates,
-    rate,
-  };
-
-  const actions = {
-    handleAmountChange,
-    handleCurrencyChange,
-  };
-
   return {
-    state,
-    actions,
-    data,
-    error,
-    isLoading,
-    isFetching,
+    status: "success",
+    state: {
+      leftValue,
+      rightValue,
+      leftCurrency,
+      rightCurrency,
+      isLoading,
+      isFetching,
+      rates,
+      rate,
+    },
+    actions: {
+      handleAmountChange,
+      handleCurrencyChange,
+    },
   };
 };

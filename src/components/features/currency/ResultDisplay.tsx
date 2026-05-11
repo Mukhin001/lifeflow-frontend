@@ -1,7 +1,9 @@
+import { Rates } from "@/src/api/currency/currency.types";
 import { CURRENCIES } from "./model/constants";
+
 interface Props {
   rate: number;
-  rates: Record<string, number>;
+  rates: Rates;
   leftCurrency: string;
   rightCurrency: string;
 }
@@ -16,11 +18,7 @@ const ResultDisplay = ({ rate, rates, leftCurrency, rightCurrency }: Props) => {
     ? `1 ${leftCurrency} = ${formatter.format(rate)} ${rightCurrency}`
     : "";
 
-  const getCrossRate = (
-    from: string,
-    to: string,
-    rates: Record<string, number>,
-  ) => {
+  const getCrossRate = (from: string, to: string, rates: Rates) => {
     const fromRate = rates[from];
     const toRate = rates[to];
 
