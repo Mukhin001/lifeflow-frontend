@@ -6,6 +6,8 @@ import { Coordinates, Mode } from "./model/types";
 import MapControls from "./MapControls";
 import dynamic from "next/dynamic";
 import { useCalculateRouteMutation } from "@/src/api/route/routeApi";
+import Loader from "../../ui/loader/Loader";
+import styles from "./model/map.module.css";
 
 const MapView = dynamic(() => import("./MapView"), {
   ssr: false,
@@ -76,25 +78,14 @@ const MapContainer = () => {
           ? "Кликните по карте, чтобы выбрать старт"
           : "Кликните по карте, чтобы выбрать точку назначения"}
       </div>
-      {isLoading && <h3 className="overlay">Строим маршрут...</h3>}
       {error && (
         <h3 className="overlay">
           Ошибка маршрута (проверь соединение или координаты)
         </h3>
       )}
-      <div style={{ position: "relative" }}>
-        {isLoading && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "rgba(255,255,255,0.4)",
-              zIndex: 1000,
-              cursor: "not-allowed",
-            }}
-          />
-        )}
 
+      <div className={styles.mapWrapper}>
+        {isLoading && <Loader overlay text="Строим маршрут..." />}
         <MapView
           startPoint={startPoint}
           endPoint={endPoint}

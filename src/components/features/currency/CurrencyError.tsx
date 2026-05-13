@@ -1,3 +1,5 @@
+import Button from "../../ui/button/Button";
+
 interface Props {
   status: string;
   message: string;
@@ -9,7 +11,7 @@ const CurrencyError = ({ status, message, onRetry }: Props) => {
     <div>
       <p>{status}</p>
       <p>{message}</p>
-      <button onClick={onRetry}> Повторить запрос</button>
+      <Button onClick={onRetry}>Повторить запрос</Button>
     </div>
   );
 };
