@@ -1,4 +1,4 @@
-import Input from "../../ui/select/Input";
+import Input from "../../ui/input/Input";
 
 interface Props {
   value: string;

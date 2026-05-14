@@ -1,3 +1,4 @@
+import Select from "../../ui/select/Select";
 import { CURRENCIES } from "./model/constants";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 const CurrencySelect = ({ value, onChange, disabled, exclude }: Props) => {
   return (
-    <select
+    <Select
       value={value}
       disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
@@ -19,7 +20,7 @@ const CurrencySelect = ({ value, onChange, disabled, exclude }: Props) => {
           {c}
         </option>
       ))}
-    </select>
+    </Select>
   );
 };
 
