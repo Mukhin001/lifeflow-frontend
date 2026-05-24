@@ -11,6 +11,7 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000",
   }),
+  tagTypes: ["Tasks"],
   endpoints: (builder) => ({
     getGreetingServer: builder.query<GreetingResponse, void>({
       query: () => "/",
