@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "../api/baseApi";
+import toastReducer from "./slices/toastSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
+      toast: toastReducer,
       [baseApi.reducerPath]: baseApi.reducer,
     },
 

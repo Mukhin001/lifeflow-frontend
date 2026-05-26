@@ -2,15 +2,17 @@
 
 import {
   useCreateTaskMutation,
+  useDeleteTaskMutation,
   useGetTasksQuery,
 } from "@/src/api/task/taskApi";
-//import { useTaskBoard } from "./hooks/useTaskBoard";
 import TaskBoardView from "./TaskBoardView";
+import { useToast } from "../../ui/toast/useToast.hooks";
 
 const TaskBoardContainer = () => {
-  // const { tasks, addTask } = useTaskBoard();
   const { data: tasks, isLoading, error } = useGetTasksQuery();
   const [createTask] = useCreateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
+  const { notify } = useToast();
 
   const handleCreateTask = async (title: string, description: string) => {
     try {
@@ -18,7 +20,21 @@ const TaskBoardContainer = () => {
         title,
         description,
       }).unwrap();
+
+      notify("Задача создана", "success");
     } catch (error) {
+      notify("Ошибка создания задачи", "error");
+      console.error(error);
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await deleteTask(id).unwrap();
+
+      notify("Задача удалена", "success");
+    } catch (error) {
+      notify("Ошибка удаления задачи", "error");
       console.error(error);
     }
   };
@@ -34,7 +50,11 @@ const TaskBoardContainer = () => {
   return (
     <div>
       <h2>Task Board Container</h2>
-      <TaskBoardView tasks={tasks} addTask={handleCreateTask} />
+      <TaskBoardView
+        tasks={tasks}
+        addTask={handleCreateTask}
+        deleteTask={handleDeleteTask}
+      />
     </div>
   );
 };

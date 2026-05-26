@@ -16,6 +16,5 @@ export type Task = {
 
 export type CreateTaskRequest = {
   title: string;
-
   description: string;
 };
