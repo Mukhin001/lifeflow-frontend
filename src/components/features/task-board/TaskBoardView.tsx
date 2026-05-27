@@ -4,16 +4,22 @@ import TaskList from "./TaskList";
 
 type Props = {
   tasks: Task[] | undefined;
-  addTask: (title: string, description: string) => void;
+  addTask: (title: string, description: string, dueDate: string) => void;
+  editTask: (
+    id: string,
+    title: string,
+    description: string,
+    dueDate: string,
+  ) => void;
   deleteTask: (id: string) => void;
 };
 
-const TaskBoardView = ({ tasks, addTask, deleteTask }: Props) => {
+const TaskBoardView = ({ tasks, addTask, editTask, deleteTask }: Props) => {
   return (
     <>
       <TaskForm onSubmit={addTask} />
 
-      <TaskList tasks={tasks} deleteTask={deleteTask} />
+      <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
     </>
   );
 };

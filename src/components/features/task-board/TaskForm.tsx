@@ -4,12 +4,13 @@ import Button from "../../ui/button/Button";
 import { useToast } from "../../ui/toast/useToast.hooks";
 
 type Props = {
-  onSubmit: (title: string, description: string) => void;
+  onSubmit: (title: string, description: string, dueDate: string) => void;
 };
 
 const TaskForm = ({ onSubmit }: Props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const { notify } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,10 +25,11 @@ const TaskForm = ({ onSubmit }: Props) => {
       return;
     }
 
-    onSubmit(title, description);
+    onSubmit(title, description, dueDate);
 
     setTitle("");
     setDescription("");
+    setDueDate("");
   };
 
   return (
@@ -42,6 +44,7 @@ const TaskForm = ({ onSubmit }: Props) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <Input type="date" onChange={(e) => setDueDate(e.target.value)} />
       <Button type="submit">Добавить задачу</Button>
     </form>
   );
