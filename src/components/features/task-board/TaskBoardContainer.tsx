@@ -15,6 +15,7 @@ const TaskBoardContainer = () => {
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const { notify } = useToast();
+  console.log(tasks);
 
   const handleCreateTask = async (
     title: string,
@@ -40,6 +41,8 @@ const TaskBoardContainer = () => {
     title: string,
     description: string,
     dueDate: string,
+    status: "todo" | "in-progress" | "done",
+    priority: "low" | "medium" | "high",
   ) => {
     try {
       await updateTask({
@@ -47,11 +50,13 @@ const TaskBoardContainer = () => {
         title,
         description,
         dueDate,
+        status,
+        priority,
       }).unwrap();
 
-      notify("Задача создана", "success");
+      notify("Задача обновлена", "success");
     } catch (error) {
-      notify("Ошибка создания задачи", "error");
+      notify("Ошибка обновления задачи", "error");
       console.error(error);
     }
   };

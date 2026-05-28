@@ -26,6 +26,8 @@ export const taskApi = baseApi.injectEndpoints({
         title: string;
         description: string;
         dueDate?: string;
+        status: string;
+        priority: string;
       }
     >({
       query: ({ id, ...body }) => ({
