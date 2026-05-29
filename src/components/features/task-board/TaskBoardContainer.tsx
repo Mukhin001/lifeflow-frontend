@@ -8,6 +8,7 @@ import {
 } from "@/src/api/task/taskApi";
 import TaskBoardView from "./TaskBoardView";
 import { useToast } from "../../ui/toast/useToast.hooks";
+import { UpdateTaskDto } from "@/src/api/task/task.types";
 
 const TaskBoardContainer = () => {
   const { data: tasks, isLoading, error } = useGetTasksQuery();
@@ -36,22 +37,11 @@ const TaskBoardContainer = () => {
     }
   };
 
-  const handleEditTask = async (
-    id: string,
-    title: string,
-    description: string,
-    dueDate: string,
-    status: "todo" | "in-progress" | "done",
-    priority: "low" | "medium" | "high",
-  ) => {
+  const handleEditTask = async (id: string, data: UpdateTaskDto) => {
     try {
       await updateTask({
         id,
-        title,
-        description,
-        dueDate,
-        status,
-        priority,
+        data,
       }).unwrap();
 
       notify("Задача обновлена", "success");

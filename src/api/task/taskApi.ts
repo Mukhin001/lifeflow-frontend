@@ -1,6 +1,6 @@
 import { baseApi } from "../baseApi";
 
-import { CreateTaskRequest, Task } from "./task.types";
+import { CreateTaskRequest, Task, UpdateTaskRequest } from "./task.types";
 
 export const taskApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,21 +19,11 @@ export const taskApi = baseApi.injectEndpoints({
       invalidatesTags: ["Tasks"],
     }),
 
-    updateTask: builder.mutation<
-      Task,
-      {
-        id: string;
-        title: string;
-        description: string;
-        dueDate?: string;
-        status: string;
-        priority: string;
-      }
-    >({
-      query: ({ id, ...body }) => ({
+    updateTask: builder.mutation<Task, UpdateTaskRequest>({
+      query: ({ id, data }) => ({
         url: `/tasks/${id}`,
         method: "PATCH",
-        body,
+        body: data,
       }),
 
       invalidatesTags: ["Tasks"],

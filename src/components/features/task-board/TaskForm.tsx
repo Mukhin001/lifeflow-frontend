@@ -36,15 +36,27 @@ const TaskForm = ({ onSubmit }: Props) => {
     <form onSubmit={handleSubmit}>
       <Input
         placeholder="Название задачи"
+        id="task-title"
+        name="task-title"
+        type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
       <Input
         placeholder="Описание"
+        id="task-description"
+        name="task-description"
+        type="text"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <Input type="date" onChange={(e) => setDueDate(e.target.value)} />
+      <Input
+        type="date"
+        id="task-date"
+        name="task-date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+      />
       <Button type="submit">Добавить задачу</Button>
     </form>
   );

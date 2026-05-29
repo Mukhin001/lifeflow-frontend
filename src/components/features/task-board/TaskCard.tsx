@@ -1,4 +1,9 @@
-import { Task } from "@/src/api/task/task.types";
+import {
+  PriorityTask,
+  StatusTask,
+  Task,
+  UpdateTaskDto,
+} from "@/src/api/task/task.types";
 import Button from "../../ui/button/Button";
 import { useState } from "react";
 import Input from "../../ui/input/Input";
@@ -6,14 +11,7 @@ import { useToast } from "../../ui/toast/useToast.hooks";
 
 type Props = {
   task: Task;
-  editTask: (
-    id: string,
-    title: string,
-    description: string,
-    dueDate: string,
-    status: "todo" | "in-progress" | "done",
-    priority: "low" | "medium" | "high",
-  ) => void;
+  editTask: (id: string, data: UpdateTaskDto) => void;
   deleteTask: (id: string) => void;
 };
 
@@ -40,14 +38,7 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
       return;
     }
 
-    editTask(
-      task._id,
-      editData.title,
-      editData.description,
-      editData.dueDate,
-      editData.status,
-      editData.priority,
-    );
+    editTask(task._id, editData);
 
     setIsEditing(false);
   };
@@ -64,17 +55,59 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
     setIsEditing(false);
   };
 
+  const updateField = (data: UpdateTaskDto) => {
+    setEditData((prev) => ({
+      ...prev,
+      ...data,
+    }));
+
+    editTask(task._id, data);
+  };
+
   return (
     <>
       {!isEditing ? (
         <li>
-          <h3>{task.title}</h3>
-          <p>{task.description}</p>
-          <span>{task.status}</span>
-          <p>Статус: {task.status}</p>
-          <p>Приоритет: {task.priority}</p>
+          <h3>{editData.title}</h3>
+          <p>{editData.description}</p>
+          <span>{editData.status}</span>
+          <p>Статус: {editData.status}</p>
+
+          <select
+            value={editData.status}
+            onChange={(e) => {
+              updateField({
+                status: e.target.value as StatusTask,
+              });
+            }}
+          >
+            <option value="todo">Todo</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+
+          <p>Приоритет: {editData.priority}</p>
+          <select
+            value={editData.priority}
+            onChange={(e) => {
+              updateField({
+                priority: e.target.value as PriorityTask,
+              });
+            }}
+          >
+            <option value="low">Low</option>
+
+            <option value="medium">Medium</option>
+
+            <option value="high">High</option>
+          </select>
           <p>Создано: {new Date(task.createdAt).toLocaleString("ru-RU")}</p>
-          <p>До: {new Date(task.dueDate).toLocaleDateString("ru-RU")}</p>
+          <p>
+            До:{" "}
+            {task.dueDate
+              ? new Date(task.dueDate).toLocaleDateString("ru-RU")
+              : "Не указано"}
+          </p>
           <Button onClick={() => deleteTask(task._id)}>удалить</Button>
           <Button onClick={() => setIsEditing(true)}>Редактировать</Button>
         </li>
@@ -82,7 +115,10 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
         <li>
           <form onSubmit={handleSubmit}>
             <Input
+              type="text"
               value={editData.title}
+              id="task-edit-title"
+              name="task-edit-title"
               onChange={(e) =>
                 setEditData((prev) => ({
                   ...prev,
@@ -91,7 +127,10 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
               }
             />
             <Input
+              type="text"
               value={editData.description}
+              id="task-edit-description"
+              name="task-edit-description"
               onChange={(e) =>
                 setEditData((prev) => ({
                   ...prev,
@@ -101,6 +140,8 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
             />
             <Input
               type="date"
+              id="task-edit-dueDate"
+              name="task-edit-dueDate"
               value={editData.dueDate}
               onChange={(e) =>
                 setEditData((prev) => ({
@@ -115,7 +156,7 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
               onChange={(e) =>
                 setEditData((prev) => ({
                   ...prev,
-                  status: e.target.value as "todo" | "in-progress" | "done",
+                  status: e.target.value as StatusTask,
                 }))
               }
             >
@@ -129,7 +170,7 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
               onChange={(e) =>
                 setEditData((prev) => ({
                   ...prev,
-                  priority: e.target.value as "low" | "medium" | "high",
+                  priority: e.target.value as PriorityTask,
                 }))
               }
             >

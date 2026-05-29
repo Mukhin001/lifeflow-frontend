@@ -37,3 +37,7 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.dateInput {
+  width: 200px;
+}

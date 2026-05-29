@@ -1,16 +1,9 @@
-import { Task } from "@/src/api/task/task.types";
+import { Task, UpdateTaskDto } from "@/src/api/task/task.types";
 import TaskCard from "./TaskCard";
 
 type Props = {
   tasks: Task[] | undefined;
-  editTask: (
-    id: string,
-    title: string,
-    description: string,
-    dueDate: string,
-    status: "todo" | "in-progress" | "done",
-    priority: "low" | "medium" | "high",
-  ) => void;
+  editTask: (id: string, data: UpdateTaskDto) => void;
   deleteTask: (id: string) => void;
 };
 
