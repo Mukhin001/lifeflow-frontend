@@ -17,11 +17,16 @@ const TaskForm = ({ onSubmit }: Props) => {
     e.preventDefault();
 
     if (!title.trim()) {
-      notify("Title обязателен", "info");
+      notify("Название обязателено", "info");
       return;
     }
     if (!description.trim()) {
-      notify("Description обязателен", "info");
+      notify("Описание обязателено", "info");
+      return;
+    }
+
+    if (dueDate && Number.isNaN(Date.parse(dueDate))) {
+      notify("Некорректная дата", "info");
       return;
     }
 
@@ -56,6 +61,7 @@ const TaskForm = ({ onSubmit }: Props) => {
         name="task-date"
         value={dueDate}
         onChange={(e) => setDueDate(e.target.value)}
+        min={new Date().toISOString().split("T")[0]}
       />
       <Button type="submit">Добавить задачу</Button>
     </form>

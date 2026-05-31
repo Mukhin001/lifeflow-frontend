@@ -1,195 +1,205 @@
-import {
-  PriorityTask,
-  StatusTask,
-  Task,
-  UpdateTaskDto,
-} from "@/src/api/task/task.types";
-import Button from "../../ui/button/Button";
-import { useState } from "react";
-import Input from "../../ui/input/Input";
-import { useToast } from "../../ui/toast/useToast.hooks";
+// import {
+//   PriorityTask,
+//   StatusTask,
+//   Task,
+//   UpdateTaskDto,
+// } from "@/src/api/task/task.types";
+// import Button from "../../ui/button/Button";
+// import { useState } from "react";
+// import Input from "../../ui/input/Input";
+// import { useToast } from "../../ui/toast/useToast.hooks";
 
-type Props = {
-  task: Task;
-  editTask: (id: string, data: UpdateTaskDto) => void;
-  deleteTask: (id: string) => void;
-};
+// type Props = {
+//   task: Task;
+//   editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
+//   deleteTask: (id: string) => void;
+// };
 
-const TaskCard = ({ task, editTask, deleteTask }: Props) => {
-  const { notify } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({
-    title: task.title,
-    description: task.description,
-    dueDate: task.dueDate?.split("T")[0] ?? "",
-    status: task.status,
-    priority: task.priority,
-  });
+// const TaskCard = ({ task, editTask, deleteTask }: Props) => {
+//   const { notify } = useToast();
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [editData, setEditData] = useState({
+//     title: task.title,
+//     description: task.description,
+//     dueDate: task.dueDate?.split("T")[0] ?? "",
+//     status: task.status,
+//     priority: task.priority,
+//   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
 
-    if (!editData.title.trim()) {
-      notify("Title обязателен", "info");
-      return;
-    }
-    if (!editData.description.trim()) {
-      notify("Description обязателен", "info");
-      return;
-    }
+//     if (!editData.title.trim()) {
+//       notify("Название обязателено", "info");
+//       return;
+//     }
+//     if (!editData.description.trim()) {
+//       notify("Описание обязателено", "info");
+//       return;
+//     }
 
-    editTask(task._id, editData);
+//     if (editData.dueDate && Number.isNaN(Date.parse(editData.dueDate))) {
+//       notify("Некорректная дата", "info");
+//       return;
+//     }
 
-    setIsEditing(false);
-  };
+//     editTask(task._id, editData);
 
-  const handleCancel = () => {
-    setEditData({
-      title: task.title,
-      description: task.description,
-      dueDate: task.dueDate?.split("T")[0] ?? "",
-      status: task.status,
-      priority: task.priority,
-    });
+//     setIsEditing(false);
+//   };
 
-    setIsEditing(false);
-  };
+//   const handleCancel = () => {
+//     setEditData({
+//       title: task.title,
+//       description: task.description,
+//       dueDate: task.dueDate?.split("T")[0] ?? "",
+//       status: task.status,
+//       priority: task.priority,
+//     });
 
-  const updateField = (data: UpdateTaskDto) => {
-    setEditData((prev) => ({
-      ...prev,
-      ...data,
-    }));
+//     setIsEditing(false);
+//   };
 
-    editTask(task._id, data);
-  };
+//   const updateField = async (data: UpdateTaskDto) => {
+//     try {
+//       await editTask(task._id, data);
 
-  return (
-    <>
-      {!isEditing ? (
-        <li>
-          <h3>{editData.title}</h3>
-          <p>{editData.description}</p>
-          <span>{editData.status}</span>
-          <p>Статус: {editData.status}</p>
+//       setEditData((prev) => ({
+//         ...prev,
+//         ...data,
+//       }));
+//     } catch (error) {
+//       notify("Ошибка обновления", "error");
+//     }
+//   };
 
-          <select
-            value={editData.status}
-            onChange={(e) => {
-              updateField({
-                status: e.target.value as StatusTask,
-              });
-            }}
-          >
-            <option value="todo">Todo</option>
-            <option value="in-progress">In Progress</option>
-            <option value="done">Done</option>
-          </select>
+//   return (
+//     <>
+//       {!isEditing ? (
+//         <li>
+//           <h3>{task.title}</h3>
+//           <p>{task.description}</p>
+//           <span>{task.status}</span>
+//           <p>Статус: {task.status}</p>
 
-          <p>Приоритет: {editData.priority}</p>
-          <select
-            value={editData.priority}
-            onChange={(e) => {
-              updateField({
-                priority: e.target.value as PriorityTask,
-              });
-            }}
-          >
-            <option value="low">Low</option>
+//           <select
+//             value={editData.status}
+//             onChange={(e) => {
+//               updateField({
+//                 status: e.target.value as StatusTask,
+//               });
+//             }}
+//           >
+//             <option value="todo">Todo</option>
+//             <option value="in-progress">In Progress</option>
+//             <option value="done">Done</option>
+//           </select>
 
-            <option value="medium">Medium</option>
+//           <p>Приоритет: {task.priority}</p>
+//           <select
+//             value={editData.priority}
+//             onChange={(e) => {
+//               updateField({
+//                 priority: e.target.value as PriorityTask,
+//               });
+//             }}
+//           >
+//             <option value="low">Low</option>
 
-            <option value="high">High</option>
-          </select>
-          <p>Создано: {new Date(task.createdAt).toLocaleString("ru-RU")}</p>
-          <p>
-            До:{" "}
-            {task.dueDate
-              ? new Date(task.dueDate).toLocaleDateString("ru-RU")
-              : "Не указано"}
-          </p>
-          <Button onClick={() => deleteTask(task._id)}>удалить</Button>
-          <Button onClick={() => setIsEditing(true)}>Редактировать</Button>
-        </li>
-      ) : (
-        <li>
-          <form onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              value={editData.title}
-              id="task-edit-title"
-              name="task-edit-title"
-              onChange={(e) =>
-                setEditData((prev) => ({
-                  ...prev,
-                  title: e.target.value,
-                }))
-              }
-            />
-            <Input
-              type="text"
-              value={editData.description}
-              id="task-edit-description"
-              name="task-edit-description"
-              onChange={(e) =>
-                setEditData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-            />
-            <Input
-              type="date"
-              id="task-edit-dueDate"
-              name="task-edit-dueDate"
-              value={editData.dueDate}
-              onChange={(e) =>
-                setEditData((prev) => ({
-                  ...prev,
-                  dueDate: e.target.value,
-                }))
-              }
-            />
+//             <option value="medium">Medium</option>
 
-            <select
-              value={editData.status}
-              onChange={(e) =>
-                setEditData((prev) => ({
-                  ...prev,
-                  status: e.target.value as StatusTask,
-                }))
-              }
-            >
-              <option value="todo">Todo</option>
-              <option value="in-progress">In Progress</option>
-              <option value="done">Done</option>
-            </select>
+//             <option value="high">High</option>
+//           </select>
+//           <p>Создано: {new Date(task.createdAt).toLocaleString("ru-RU")}</p>
+//           <p>
+//             До:{" "}
+//             {task.dueDate
+//               ? new Date(task.dueDate).toLocaleDateString("ru-RU")
+//               : "Не указано"}
+//           </p>
+//           <Button onClick={() => deleteTask(task._id)}>удалить</Button>
+//           <Button onClick={() => setIsEditing(true)}>Редактировать</Button>
+//         </li>
+//       ) : (
+//         <li>
+//           <form onSubmit={handleSubmit}>
+//             <Input
+//               type="text"
+//               value={editData.title}
+//               id="task-edit-title"
+//               name="task-edit-title"
+//               onChange={(e) =>
+//                 setEditData((prev) => ({
+//                   ...prev,
+//                   title: e.target.value,
+//                 }))
+//               }
+//             />
+//             <Input
+//               type="text"
+//               value={editData.description}
+//               id="task-edit-description"
+//               name="task-edit-description"
+//               onChange={(e) =>
+//                 setEditData((prev) => ({
+//                   ...prev,
+//                   description: e.target.value,
+//                 }))
+//               }
+//             />
+//             <Input
+//               type="date"
+//               id="task-edit-dueDate"
+//               name="task-edit-dueDate"
+//               value={editData.dueDate}
+//               min={new Date().toISOString().split("T")[0]}
+//               onChange={(e) =>
+//                 setEditData((prev) => ({
+//                   ...prev,
+//                   dueDate: e.target.value,
+//                 }))
+//               }
+//             />
 
-            <select
-              value={editData.priority}
-              onChange={(e) =>
-                setEditData((prev) => ({
-                  ...prev,
-                  priority: e.target.value as PriorityTask,
-                }))
-              }
-            >
-              <option value="low">Low</option>
+//             <select
+//               value={editData.status}
+//               onChange={(e) =>
+//                 setEditData((prev) => ({
+//                   ...prev,
+//                   status: e.target.value as StatusTask,
+//                 }))
+//               }
+//             >
+//               <option value="todo">Todo</option>
+//               <option value="in-progress">In Progress</option>
+//               <option value="done">Done</option>
+//             </select>
 
-              <option value="medium">Medium</option>
+//             <select
+//               value={editData.priority}
+//               onChange={(e) =>
+//                 setEditData((prev) => ({
+//                   ...prev,
+//                   priority: e.target.value as PriorityTask,
+//                 }))
+//               }
+//             >
+//               <option value="low">Low</option>
 
-              <option value="high">High</option>
-            </select>
+//               <option value="medium">Medium</option>
 
-            <Button type="submit">Сохранить</Button>
-            <Button type="button" onClick={handleCancel}>
-              Отмена
-            </Button>
-          </form>
-        </li>
-      )}
-    </>
-  );
-};
+//               <option value="high">High</option>
+//             </select>
 
-export default TaskCard;
+//             <Button type="submit">Сохранить</Button>
+//             <Button type="button" onClick={handleCancel}>
+//               Отмена
+//             </Button>
+//           </form>
+//         </li>
+//       )}
+//     </>
+//   );
+// };
+
+// export default TaskCard;

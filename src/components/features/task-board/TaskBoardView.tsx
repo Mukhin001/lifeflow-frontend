@@ -5,7 +5,7 @@ import TaskList from "./TaskList";
 type Props = {
   tasks: Task[] | undefined;
   addTask: (title: string, description: string, dueDate: string) => void;
-  editTask: (id: string, data: UpdateTaskDto) => void;
+  editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
   deleteTask: (id: string) => void;
 };
 
