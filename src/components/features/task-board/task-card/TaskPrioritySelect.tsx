@@ -13,11 +13,19 @@ const TaskPrioritySelect = ({ taskId, value, editTask }: Props) => {
     });
   };
   return (
-    <select value={value} onChange={handleChange}>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
+    <div>
+      <label htmlFor={`priority-${taskId}`}>Приоритет: </label>
+      <select
+        id={`priority-${taskId}`}
+        name={`priority-${taskId}`}
+        value={value}
+        onChange={handleChange}
+      >
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+    </div>
   );
 };
 

@@ -14,11 +14,19 @@ const TaskStatusSelect = ({ taskId, value, editTask }: Props) => {
   };
 
   return (
-    <select value={value} onChange={handleChange}>
-      <option value="todo">Todo</option>
-      <option value="in-progress">In Progress</option>
-      <option value="done">Done</option>
-    </select>
+    <div>
+      <label htmlFor={`status-${taskId}`}>Статус: </label>
+      <select
+        id={`status-${taskId}`}
+        name={`status-${taskId}`}
+        value={value}
+        onChange={handleChange}
+      >
+        <option value="todo">Todo</option>
+        <option value="in-progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
   );
 };
 

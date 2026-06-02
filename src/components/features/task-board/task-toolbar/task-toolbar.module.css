@@ -1,0 +1,33 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  margin: 24px 0;
+  padding: 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.group label {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.group select {
+  min-width: 180px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  font-size: 14px;
+}

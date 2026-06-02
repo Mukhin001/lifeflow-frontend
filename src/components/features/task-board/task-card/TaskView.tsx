@@ -2,6 +2,7 @@ import { Task, UpdateTaskDto } from "@/src/api/task/task.types";
 import Button from "@/src/components/ui/button/Button";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskPrioritySelect from "./TaskPrioritySelect";
+import styles from "./css/task-card.module.css";
 
 type Props = {
   task: Task;
@@ -12,11 +13,24 @@ type Props = {
 
 const TaskView = ({ task, onEdit, deleteTask, editTask }: Props) => {
   return (
-    <>
-      <h3>{task.title}</h3>
-      <p>{task.description}</p>
-      <span>{task.status}</span>
-      <p>Статус: {task.status}</p>
+    <div className={styles.taskCard}>
+      <div className={styles.header}>
+        <h3 className={styles.title}>{task.title}</h3>
+
+        <div className={styles.badges}>
+          <span className={`${styles.badge} ${styles[`status${task.status}`]}`}>
+            {task.status + "  "}
+          </span>
+
+          <span
+            className={`${styles.badge} ${styles[`priority${task.priority}`]}`}
+          >
+            {task.priority}
+          </span>
+        </div>
+      </div>
+
+      <p className={styles.description}>{task.description}</p>
 
       <TaskStatusSelect
         taskId={task._id}
@@ -24,23 +38,31 @@ const TaskView = ({ task, onEdit, deleteTask, editTask }: Props) => {
         editTask={editTask}
       />
 
-      <p>Приоритет: {task.priority}</p>
       <TaskPrioritySelect
         taskId={task._id}
         value={task.priority}
         editTask={editTask}
       />
 
-      <p>Создано: {new Date(task.createdAt).toLocaleString("ru-RU")}</p>
-      <p>
-        До:{" "}
-        {task.dueDate
-          ? new Date(task.dueDate).toLocaleDateString("ru-RU")
-          : "Не указано"}
-      </p>
-      <Button onClick={() => deleteTask(task._id)}>удалить</Button>
-      <Button onClick={onEdit}>Редактировать</Button>
-    </>
+      <div className={styles.meta}>
+        <span>
+          📅 Создано: {new Date(task.createdAt).toLocaleString("ru-RU")}
+        </span>
+
+        <span>
+          ⏳ Срок:{" "}
+          {task.dueDate
+            ? new Date(task.dueDate).toLocaleDateString("ru-RU")
+            : "Не указан"}
+        </span>
+      </div>
+
+      <div className={styles.actions}>
+        <Button onClick={onEdit}>Редактировать</Button>
+
+        <Button onClick={() => deleteTask(task._id)}>Удалить</Button>
+      </div>
+    </div>
   );
 };
 

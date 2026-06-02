@@ -1,5 +1,6 @@
 import { Task, UpdateTaskDto } from "@/src/api/task/task.types";
 import TaskCard from "./task-card/TaskCard";
+import styles from "./task-card/css/task-card.module.css";
 
 type Props = {
   tasks: Task[] | undefined;
@@ -9,7 +10,7 @@ type Props = {
 
 const TaskList = ({ tasks, editTask, deleteTask }: Props) => {
   return (
-    <ul>
+    <ul className={styles.taskList}>
       {tasks?.map((task) => (
         <TaskCard
           key={task._id}
