@@ -9,9 +9,10 @@ import {
 import TaskBoardView from "./TaskBoardView";
 import { useToast } from "../../ui/toast/useToast.hooks";
 import { UpdateTaskDto } from "@/src/api/task/task.types";
+import Button from "../../ui/button/Button";
 
 const TaskBoardContainer = () => {
-  const { data: tasks, isLoading, error } = useGetTasksQuery();
+  const { data: tasks, isLoading, error, refetch } = useGetTasksQuery();
   const [createTask] = useCreateTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
@@ -67,7 +68,12 @@ const TaskBoardContainer = () => {
   }
 
   if (error) {
-    return <div>Ошибка загрузки задач</div>;
+    return (
+      <div>
+        Ошибка получения задач
+        <Button onClick={refetch}>Попробовать снова</Button>
+      </div>
+    );
   }
 
   return (
