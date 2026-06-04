@@ -40,6 +40,11 @@ const TaskEditForm = ({ task, editTask, setIsEditing }: Props) => {
       return;
     }
 
+    if (editData.title.length > 100) {
+      notify("Максимум 100 символов", "info");
+      return;
+    }
+
     editTask(task._id, editData);
 
     setIsEditing();

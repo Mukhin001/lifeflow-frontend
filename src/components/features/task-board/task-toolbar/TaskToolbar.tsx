@@ -1,7 +1,10 @@
 import { SortField, SortOrder } from "./task-toolbar.types";
 import styles from "./task-toolbar.module.css";
+import TaskSearch from "./TaskSearch";
 
 type Props = {
+  search: string;
+  onSearchChange: (value: string) => void;
   sortField: SortField;
   sortOrder: SortOrder;
   onSortFieldChange: (value: SortField) => void;
@@ -9,6 +12,8 @@ type Props = {
 };
 
 const TaskToolbar = ({
+  search,
+  onSearchChange,
   sortField,
   sortOrder,
   onSortFieldChange,
@@ -16,6 +21,7 @@ const TaskToolbar = ({
 }: Props) => {
   return (
     <div className={styles.toolbar}>
+      <TaskSearch value={search} onChange={onSearchChange} />
       <div className={styles.group}>
         <label>Сортировка</label>
 

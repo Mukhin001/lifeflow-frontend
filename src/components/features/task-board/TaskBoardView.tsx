@@ -1,4 +1,9 @@
-import { Task, UpdateTaskDto } from "@/src/api/task/task.types";
+import {
+  PriorityTask,
+  StatusTask,
+  Task,
+  UpdateTaskDto,
+} from "@/src/api/task/task.types";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 import { SortField, SortOrder } from "./task-toolbar/task-toolbar.types";
@@ -13,21 +18,36 @@ type Props = {
 };
 
 const TaskBoardView = ({ tasks, addTask, editTask, deleteTask }: Props) => {
+  const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<SortField>("date");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
-  const sortedTasks = useMemo(() => {
+  const filteredTasks = useMemo(() => {
     if (!tasks) return [];
 
-    const copy = [...tasks];
+    const query = search.toLowerCase().trim();
 
-    const priorityOrder = {
-      high: 3,
-      medium: 2,
+    if (!query) return tasks;
+
+    return tasks.filter(
+      (task) =>
+        task.title.toLowerCase().includes(query) ||
+        task.description.toLowerCase().includes(query),
+    );
+  }, [tasks, search]);
+
+  const sortedTasks = useMemo(() => {
+    if (!filteredTasks) return [];
+
+    const copy = [...filteredTasks];
+
+    const priorityOrder: Record<PriorityTask, number> = {
       low: 1,
+      medium: 2,
+      high: 3,
     };
 
-    const statusOrder = {
+    const statusOrder: Record<StatusTask, number> = {
       todo: 1,
       "in-progress": 2,
       done: 3,
@@ -55,13 +75,15 @@ const TaskBoardView = ({ tasks, addTask, editTask, deleteTask }: Props) => {
     });
 
     return copy;
-  }, [tasks, sortField, sortOrder]);
+  }, [filteredTasks, sortField, sortOrder]);
 
   return (
     <>
       <TaskForm onSubmit={addTask} />
 
       <TaskToolbar
+        search={search}
+        onSearchChange={setSearch}
         sortField={sortField}
         sortOrder={sortOrder}
         onSortFieldChange={setSortField}

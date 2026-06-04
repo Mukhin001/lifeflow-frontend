@@ -30,7 +30,12 @@ const TaskForm = ({ onSubmit }: Props) => {
       return;
     }
 
-    onSubmit(title, description, dueDate);
+    if (title.length > 100) {
+      notify("Максимум 100 символов", "info");
+      return;
+    }
+
+    onSubmit(title.trim(), description.trim(), dueDate);
 
     setTitle("");
     setDescription("");
