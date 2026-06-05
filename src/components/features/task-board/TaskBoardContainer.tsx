@@ -4,17 +4,17 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
   useGetTasksQuery,
-  useUpdateTaskMutation,
+  //useUpdateTaskMutation,
 } from "@/src/api/task/taskApi";
 import TaskBoardView from "./TaskBoardView";
 import { useToast } from "../../ui/toast/useToast.hooks";
-import { UpdateTaskDto } from "@/src/api/task/task.types";
+//import { UpdateTaskDto } from "@/src/api/task/task.types";
 import Button from "../../ui/button/Button";
 
 const TaskBoardContainer = () => {
   const { data: tasks, isLoading, error, refetch } = useGetTasksQuery();
   const [createTask] = useCreateTaskMutation();
-  const [updateTask] = useUpdateTaskMutation();
+  //const [updateTask, updateTaskState] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const { notify } = useToast();
   console.log(tasks);
@@ -38,19 +38,19 @@ const TaskBoardContainer = () => {
     }
   };
 
-  const handleEditTask = async (id: string, data: UpdateTaskDto) => {
-    try {
-      await updateTask({
-        id,
-        data,
-      }).unwrap();
+  // const handleEditTask = async (id: string, data: UpdateTaskDto) => {
+  //   try {
+  //     await updateTask({
+  //       id,
+  //       data,
+  //     }).unwrap();
 
-      notify("Задача обновлена", "success");
-    } catch (error) {
-      notify("Ошибка обновления задачи", "error");
-      console.error(error);
-    }
-  };
+  //     notify("Задача обновлена", "success");
+  //   } catch (error) {
+  //     notify("Ошибка обновления задачи", "error");
+  //     console.error(error);
+  //   }
+  // };
 
   const handleDeleteTask = async (id: string) => {
     try {
@@ -82,8 +82,11 @@ const TaskBoardContainer = () => {
       <TaskBoardView
         tasks={tasks}
         addTask={handleCreateTask}
-        editTask={handleEditTask}
+        //editTask={handleEditTask}
         deleteTask={handleDeleteTask}
+        // isUpdatingTask={updateTaskState.isLoading}
+        // isUpdateTaskError={updateTaskState.isError}
+        // isUpdateTaskSuccess={updateTaskState.isSuccess}
       />
     </div>
   );

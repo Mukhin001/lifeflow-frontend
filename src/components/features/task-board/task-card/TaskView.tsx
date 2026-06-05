@@ -1,19 +1,32 @@
-import { Task, UpdateTaskDto } from "@/src/api/task/task.types";
+import {
+  PriorityTask,
+  StatusTask,
+  Task,
+  UpdateTaskDto,
+} from "@/src/api/task/task.types";
 import Button from "@/src/components/ui/button/Button";
-import TaskStatusSelect from "./TaskStatusSelect";
-import TaskPrioritySelect from "./TaskPrioritySelect";
 import styles from "./css/task-card.module.css";
+import TaskSelect from "./TaskSelect";
+import Loader from "@/src/components/ui/loader/Loader";
 
 type Props = {
   task: Task;
   onEdit: () => void;
   deleteTask: (id: string) => void;
   editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
+  isUpdatingTask: boolean;
 };
 
-const TaskView = ({ task, onEdit, deleteTask, editTask }: Props) => {
+const TaskView = ({
+  task,
+  onEdit,
+  deleteTask,
+  editTask,
+  isUpdatingTask,
+}: Props) => {
   return (
     <div className={styles.taskCard}>
+      {isUpdatingTask && <Loader overlay />}
       <div className={styles.header}>
         <h3 className={styles.title}>{task.title}</h3>
 
@@ -32,16 +45,36 @@ const TaskView = ({ task, onEdit, deleteTask, editTask }: Props) => {
 
       <p className={styles.description}>{task.description}</p>
 
-      <TaskStatusSelect
+      <TaskSelect
+        label={{ value: "status", label: "Статус" }}
         taskId={task._id}
         value={task.status}
-        editTask={editTask}
+        options={[
+          { value: "todo", label: "Todo" },
+          { value: "in-progress", label: "In Progress" },
+          { value: "done", label: "Done" },
+        ]}
+        onChange={async (value) => {
+          await editTask(task._id, {
+            status: value as StatusTask,
+          });
+        }}
       />
 
-      <TaskPrioritySelect
+      <TaskSelect
+        label={{ value: "priority", label: "Приоритет" }}
         taskId={task._id}
         value={task.priority}
-        editTask={editTask}
+        options={[
+          { value: "low", label: "Low" },
+          { value: "medium", label: "Medium" },
+          { value: "high", label: "High" },
+        ]}
+        onChange={async (value) => {
+          await editTask(task._id, {
+            priority: value as PriorityTask,
+          });
+        }}
       />
 
       <div className={styles.meta}>

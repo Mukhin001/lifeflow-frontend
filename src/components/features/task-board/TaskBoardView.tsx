@@ -13,11 +13,22 @@ import TaskToolbar from "./task-toolbar/TaskToolbar";
 type Props = {
   tasks: Task[] | undefined;
   addTask: (title: string, description: string, dueDate: string) => void;
-  editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
+  //editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
   deleteTask: (id: string) => void;
+  // isUpdatingTask: boolean;
+  // isUpdateTaskError: boolean;
+  // isUpdateTaskSuccess: boolean;
 };
 
-const TaskBoardView = ({ tasks, addTask, editTask, deleteTask }: Props) => {
+const TaskBoardView = ({
+  tasks,
+  addTask,
+  //editTask,
+  deleteTask,
+  // isUpdatingTask,
+  // isUpdateTaskError,
+  // isUpdateTaskSuccess,
+}: Props) => {
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<SortField>("date");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
@@ -92,8 +103,11 @@ const TaskBoardView = ({ tasks, addTask, editTask, deleteTask }: Props) => {
 
       <TaskList
         tasks={sortedTasks}
-        editTask={editTask}
+        //editTask={editTask}
         deleteTask={deleteTask}
+        // isUpdatingTask={isUpdatingTask}
+        // isUpdateTaskError={isUpdateTaskError}
+        // isUpdateTaskSuccess={isUpdateTaskSuccess}
       />
     </>
   );
