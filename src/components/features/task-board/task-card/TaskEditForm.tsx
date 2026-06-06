@@ -1,9 +1,4 @@
-import {
-  PriorityTask,
-  StatusTask,
-  Task,
-  UpdateTaskDto,
-} from "@/src/api/task/task.types";
+import { PriorityTask, StatusTask, Task } from "@/src/api/task/task.types";
 import Button from "@/src/components/ui/button/Button";
 import Input from "@/src/components/ui/input/Input";
 import { useToast } from "@/src/components/ui/toast/useToast.hooks";
@@ -11,20 +6,16 @@ import { useState } from "react";
 import TaskSelect from "./TaskSelect";
 import Loader from "@/src/components/ui/loader/Loader";
 import { useUpdateTaskMutation } from "@/src/api/task/taskApi";
+import styles from "./css/task-card.module.css";
 
 type Props = {
   task: Task;
   setIsEditing: () => void;
-  editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
-  isUpdatingTask: boolean;
-  isUpdateTaskError: boolean;
-  isUpdateTaskSuccess: boolean;
 };
 
-const TaskEditForm = ({ task, editTask, setIsEditing }: Props) => {
+const TaskEditForm = ({ task, setIsEditing }: Props) => {
   const { notify } = useToast();
-  const [updateTask, { isLoading, isError, isSuccess }] =
-    useUpdateTaskMutation();
+  const [updateTask, { isLoading }] = useUpdateTaskMutation();
 
   const [editData, setEditData] = useState({
     title: task.title,
@@ -57,7 +48,7 @@ const TaskEditForm = ({ task, editTask, setIsEditing }: Props) => {
     }
 
     try {
-      await editTask(task._id, editData);
+      await updateTask({ id: task._id, data: editData }).unwrap();
       setIsEditing();
       notify("Задача обновленна", "success");
     } catch (e) {
@@ -78,7 +69,7 @@ const TaskEditForm = ({ task, editTask, setIsEditing }: Props) => {
   };
 
   return (
-    <>
+    <div className={styles.taskCard}>
       {isLoading && <Loader overlay text="Сохраняем..." />}
       <form onSubmit={handleSubmit}>
         <Input
@@ -161,7 +152,7 @@ const TaskEditForm = ({ task, editTask, setIsEditing }: Props) => {
           Отмена
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 

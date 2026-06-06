@@ -8,25 +8,35 @@ import Button from "@/src/components/ui/button/Button";
 import styles from "./css/task-card.module.css";
 import TaskSelect from "./TaskSelect";
 import Loader from "@/src/components/ui/loader/Loader";
+import { useUpdateTaskMutation } from "@/src/api/task/taskApi";
+import { useToast } from "@/src/components/ui/toast/useToast.hooks";
 
 type Props = {
   task: Task;
   onEdit: () => void;
   deleteTask: (id: string) => void;
-  editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
-  isUpdatingTask: boolean;
 };
 
-const TaskView = ({
-  task,
-  onEdit,
-  deleteTask,
-  editTask,
-  isUpdatingTask,
-}: Props) => {
+const TaskView = ({ task, onEdit, deleteTask }: Props) => {
+  const { notify } = useToast();
+  const [updateTask, { isLoading }] = useUpdateTaskMutation();
+
+  const handleEditTask = async (id: string, data: UpdateTaskDto) => {
+    try {
+      await updateTask({
+        id,
+        data,
+      }).unwrap();
+
+      notify("Задача обновлена", "success");
+    } catch (error) {
+      notify("Ошибка обновления задачи", "error");
+      console.error(error);
+    }
+  };
   return (
     <div className={styles.taskCard}>
-      {isUpdatingTask && <Loader overlay />}
+      {isLoading && <Loader overlay text="Обновление задачи..." />}
       <div className={styles.header}>
         <h3 className={styles.title}>{task.title}</h3>
 
@@ -55,7 +65,7 @@ const TaskView = ({
           { value: "done", label: "Done" },
         ]}
         onChange={async (value) => {
-          await editTask(task._id, {
+          await handleEditTask(task._id, {
             status: value as StatusTask,
           });
         }}
@@ -71,7 +81,7 @@ const TaskView = ({
           { value: "high", label: "High" },
         ]}
         onChange={async (value) => {
-          await editTask(task._id, {
+          await handleEditTask(task._id, {
             priority: value as PriorityTask,
           });
         }}

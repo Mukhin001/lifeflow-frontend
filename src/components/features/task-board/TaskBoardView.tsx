@@ -1,9 +1,4 @@
-import {
-  PriorityTask,
-  StatusTask,
-  Task,
-  UpdateTaskDto,
-} from "@/src/api/task/task.types";
+import { PriorityTask, StatusTask, Task } from "@/src/api/task/task.types";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 import { SortField, SortOrder } from "./task-toolbar/task-toolbar.types";
@@ -12,22 +7,21 @@ import TaskToolbar from "./task-toolbar/TaskToolbar";
 
 type Props = {
   tasks: Task[] | undefined;
-  addTask: (title: string, description: string, dueDate: string) => void;
-  //editTask: (id: string, data: UpdateTaskDto) => Promise<void>;
+  addTask: (
+    title: string,
+    description: string,
+    dueDate: string,
+  ) => Promise<void>;
   deleteTask: (id: string) => void;
-  // isUpdatingTask: boolean;
-  // isUpdateTaskError: boolean;
-  // isUpdateTaskSuccess: boolean;
+  isCreatingTask: boolean;
 };
 
 const TaskBoardView = ({
   tasks,
   addTask,
-  //editTask,
   deleteTask,
-  // isUpdatingTask,
-  // isUpdateTaskError,
-  // isUpdateTaskSuccess,
+
+  isCreatingTask,
 }: Props) => {
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<SortField>("date");
@@ -90,7 +84,7 @@ const TaskBoardView = ({
 
   return (
     <>
-      <TaskForm onSubmit={addTask} />
+      <TaskForm onSubmit={addTask} isCreatingTask={isCreatingTask} />
 
       <TaskToolbar
         search={search}
@@ -101,14 +95,7 @@ const TaskBoardView = ({
         onSortOrderChange={setSortOrder}
       />
 
-      <TaskList
-        tasks={sortedTasks}
-        //editTask={editTask}
-        deleteTask={deleteTask}
-        // isUpdatingTask={isUpdatingTask}
-        // isUpdateTaskError={isUpdateTaskError}
-        // isUpdateTaskSuccess={isUpdateTaskSuccess}
-      />
+      <TaskList tasks={sortedTasks} deleteTask={deleteTask} />
     </>
   );
 };

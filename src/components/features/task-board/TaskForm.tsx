@@ -2,18 +2,25 @@ import { useState } from "react";
 import Input from "../../ui/input/Input";
 import Button from "../../ui/button/Button";
 import { useToast } from "../../ui/toast/useToast.hooks";
+import Loader from "../../ui/loader/Loader";
+import styles from "./task-card/css/task-card.module.css";
 
 type Props = {
-  onSubmit: (title: string, description: string, dueDate: string) => void;
+  isCreatingTask: boolean;
+  onSubmit: (
+    title: string,
+    description: string,
+    dueDate: string,
+  ) => Promise<void>;
 };
 
-const TaskForm = ({ onSubmit }: Props) => {
+const TaskForm = ({ isCreatingTask, onSubmit }: Props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const { notify } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title.trim()) {
@@ -35,41 +42,48 @@ const TaskForm = ({ onSubmit }: Props) => {
       return;
     }
 
-    onSubmit(title.trim(), description.trim(), dueDate);
+    try {
+      await onSubmit(title.trim(), description.trim(), dueDate);
 
-    setTitle("");
-    setDescription("");
-    setDueDate("");
+      setTitle("");
+      setDescription("");
+      setDueDate("");
+    } catch {}
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        placeholder="Название задачи"
-        id="task-title"
-        name="task-title"
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <Input
-        placeholder="Описание"
-        id="task-description"
-        name="task-description"
-        type="text"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Input
-        type="date"
-        id="task-date"
-        name="task-date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        min={new Date().toISOString().split("T")[0]}
-      />
-      <Button type="submit">Добавить задачу</Button>
-    </form>
+    <div className={styles.taskCard}>
+      {isCreatingTask && <Loader overlay text="Создание задачи..." />}
+      <form onSubmit={handleSubmit}>
+        <Input
+          placeholder="Название задачи"
+          id="task-title"
+          name="task-title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <Input
+          placeholder="Описание"
+          id="task-description"
+          name="task-description"
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Input
+          type="date"
+          id="task-date"
+          name="task-date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          min={new Date().toISOString().split("T")[0]}
+        />
+        <Button type="submit" disabled={isCreatingTask}>
+          {isCreatingTask ? "Создание..." : "Добавить задачу"}
+        </Button>
+      </form>
+    </div>
   );
 };
 

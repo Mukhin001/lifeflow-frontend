@@ -4,17 +4,15 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
   useGetTasksQuery,
-  //useUpdateTaskMutation,
 } from "@/src/api/task/taskApi";
 import TaskBoardView from "./TaskBoardView";
 import { useToast } from "../../ui/toast/useToast.hooks";
-//import { UpdateTaskDto } from "@/src/api/task/task.types";
 import Button from "../../ui/button/Button";
+import Loader from "../../ui/loader/Loader";
 
 const TaskBoardContainer = () => {
   const { data: tasks, isLoading, error, refetch } = useGetTasksQuery();
-  const [createTask] = useCreateTaskMutation();
-  //const [updateTask, updateTaskState] = useUpdateTaskMutation();
+  const [createTask, { isLoading: isCreatingTask }] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const { notify } = useToast();
   console.log(tasks);
@@ -35,22 +33,9 @@ const TaskBoardContainer = () => {
     } catch (error) {
       notify("Ошибка создания задачи", "error");
       console.error(error);
+      throw error;
     }
   };
-
-  // const handleEditTask = async (id: string, data: UpdateTaskDto) => {
-  //   try {
-  //     await updateTask({
-  //       id,
-  //       data,
-  //     }).unwrap();
-
-  //     notify("Задача обновлена", "success");
-  //   } catch (error) {
-  //     notify("Ошибка обновления задачи", "error");
-  //     console.error(error);
-  //   }
-  // };
 
   const handleDeleteTask = async (id: string) => {
     try {
@@ -64,10 +49,10 @@ const TaskBoardContainer = () => {
   };
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Loader overlay text="Загрузка задач..." />;
   }
 
-  if (error) {
+  if (error && !tasks) {
     return (
       <div>
         Ошибка получения задач
@@ -82,11 +67,8 @@ const TaskBoardContainer = () => {
       <TaskBoardView
         tasks={tasks}
         addTask={handleCreateTask}
-        //editTask={handleEditTask}
+        isCreatingTask={isCreatingTask}
         deleteTask={handleDeleteTask}
-        // isUpdatingTask={updateTaskState.isLoading}
-        // isUpdateTaskError={updateTaskState.isError}
-        // isUpdateTaskSuccess={updateTaskState.isSuccess}
       />
     </div>
   );
