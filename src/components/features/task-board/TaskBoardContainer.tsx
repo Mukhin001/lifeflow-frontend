@@ -15,7 +15,6 @@ const TaskBoardContainer = () => {
   const [createTask, { isLoading: isCreatingTask }] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const { notify } = useToast();
-  console.log(tasks);
 
   const handleCreateTask = async (
     title: string,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetGreetingServerQuery } from "@/src/api/baseApi";
+import { useGetGreetingServerQuery } from "@/src/api/greetingServer/greetingServer";
 
 export default function Home() {
   const { data, isLoading, error } = useGetGreetingServerQuery();

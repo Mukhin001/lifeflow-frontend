@@ -18,6 +18,7 @@ type Props = {
 };
 
 const TaskView = ({ task, onEdit, deleteTask }: Props) => {
+  console.count("TaskView render");
   const { notify } = useToast();
   const [updateTask, { isLoading }] = useUpdateTaskMutation();
 
@@ -34,6 +35,7 @@ const TaskView = ({ task, onEdit, deleteTask }: Props) => {
       console.error(error);
     }
   };
+
   return (
     <div className={styles.taskCard}>
       {isLoading && <Loader overlay text="Обновление задачи..." />}

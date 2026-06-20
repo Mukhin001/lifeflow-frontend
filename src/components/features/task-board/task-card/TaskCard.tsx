@@ -10,6 +10,7 @@ type Props = {
 
 const TaskCard = ({ task, deleteTask }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
+  console.count("TaskCard");
 
   return (
     <li>

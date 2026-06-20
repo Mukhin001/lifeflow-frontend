@@ -8,9 +8,11 @@ type Props = {
 };
 
 const TaskList = ({ tasks, deleteTask }: Props) => {
+  console.log("tasks length: ", tasks?.length);
+  console.count("TaskList");
   return (
     <ul className={styles.taskList}>
-      {tasks?.map((task) => (
+      {tasks?.slice(1).map((task) => (
         <TaskCard key={task._id} task={task} deleteTask={deleteTask} />
       ))}
     </ul>

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "@/src/styles/globals.css";
 import Toast from "@/src/components/ui/toast/Toast";
+import Header from "@/src/components/layout/header/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body>
         <StoreProvider>
+          <Header />
           {children}
           <Toast />
         </StoreProvider>

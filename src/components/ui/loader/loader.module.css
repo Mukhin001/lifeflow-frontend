@@ -15,9 +15,10 @@
   inset: 0;
   z-index: 1000;
 
-  background: rgba(255, 255, 255, 0.4);
+  /* background: rgba(255, 255, 255, 0.4); */
   cursor: "not-allowed";
-  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(2px); */
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .loader {
